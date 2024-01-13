@@ -1,0 +1,12 @@
+rocksdb:
+  name:
+  db-dir:
+  
+server:
+  port: 8090
+
+logging:
+  file:
+    path: .
+  pattern:
+    console: 
