@@ -1,0 +1,47 @@
+# apiVersion: storage.k8s.io/v1
+# kind: CSIDriver
+# metadata:
+#   name: efs.csi.aws.com
+# spec:
+#   attachRequired: false
+
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-0e7c72f966ac2474d
+  directoryPerms: "700"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sin-efs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 500Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sin-efs
+spec:
+  capacity:
+    storage: 500Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-0e7c72f966ac2474d

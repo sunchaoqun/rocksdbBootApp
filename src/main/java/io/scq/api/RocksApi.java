@@ -1,6 +1,6 @@
-package io.stockgeeks.api;
+package io.scq.api;
 
-import io.stockgeeks.repository.KeyValueRepository;
+import io.scq.repository.KeyValueRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -32,16 +32,18 @@ public class RocksApi {
   @PostMapping(value = "/{key}", consumes = MediaType.TEXT_PLAIN_VALUE)
   public ResponseEntity<String> save(@PathVariable("key") String key, @RequestBody String value) {
     log.info("RocksApi.save");
-    for(int i=0;i<100000000;i++){
-      try {
-        Thread.sleep(10);
-      } catch (Exception e) {
+    // for(int i=0;i<100000000;i++){
+    //   try {
+    //     Thread.sleep(10);
+    //   } catch (Exception e) {
         
-      }
-      String tp = formatter.format(new Date()) + " -> " + (value+i);
-      rocksDB.save(key, tp);
-      log.info(tp);
-    }
+    //   }
+    //   String tp = formatter.format(new Date()) + " -> " + (value+i);
+    //   rocksDB.save(key, tp);
+    //   log.info(tp);
+    // }
+    
+    rocksDB.save(key, value);
     
     return ResponseEntity.ok(value);
   }

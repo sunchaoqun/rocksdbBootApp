@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rocksdb-primary-deployment
+  name: rocksdb-primary-deployment
+  namespace: storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocksdb-primary
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rocksdb-primary
+    spec:
+      # serviceAccountName: ci-serviceaccount
+      volumes:
+      - name: efs-volume
+        persistentVolumeClaim:
+          claimName: efs-storage-claim
+      containers:
+      - image: sunchaoqun/rocksdb-primary:latest
+        name: rocksdb-primary
+        volumeMounts:
+        - name: efs-volume
+          mountPath: /efs
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: rocksdb-secondary-deployment
+  name: rocksdb-secondary-deployment
+  namespace: storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocksdb-secondary
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: rocksdb-secondary
+    spec:
+      # serviceAccountName: ci-serviceaccount
+      volumes:
+      - name: efs-volume
+        persistentVolumeClaim:
+          claimName: efs-storage-claim
+      containers:
+      - image: sunchaoqun/rocksdb-secondary:latest
+        name: rocksdb-secondary
+        volumeMounts:
+        - name: efs-volume
+          mountPath: /efs

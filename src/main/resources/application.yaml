@@ -6,7 +6,6 @@ server:
   port: 8090
 
 logging:
-  file:
-    path: .
+  file: /efs/spring-primary.log
   pattern:
     console: 
